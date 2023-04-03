@@ -10,15 +10,15 @@
 
 <!--Шапка-->
 <body>
-<input type="hidden" class="user_id" th:value="${user.getId()}"/>
+<input type="hidden" class="user_id" />
 <div class="container-fluid bg-dark ">
     <div class="row">
         <div class="col text-white">
             <h5>
                 <div class="p-2 mb-2 ">
-                    <p><b th:utext="${user.email}"></b>
+                    <p><b id ="nav-email"></b>
                         <span>with roles:</span>
-                        <span th:text="${user.roleToString()}"></span>
+                        <span id = "nav-roles"></span>
                     </p>
                 </div>
             </h5>
@@ -81,5 +81,6 @@
         crossorigin="anonymous"></script>
 
 <script src="user.js"></script>
+<!--<script src="roles.js"></script>-->
 </body>
 </html>

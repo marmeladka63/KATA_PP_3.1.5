@@ -1,39 +1,46 @@
-document.addEventListener('DOMContentLoaded', handleUserPageLoader);
 
-async function getData() {
-    const userId = document.querySelector('.user_id').value;
-    const url = `/api/user/${userId}`;
-    let response = await fetch(url);
-    return response.json();
+let currentUserUrl = "/api/admin/currentUser";
+let currentUser = fetch(currentUserUrl).then(response => response.json(), error => alert(`Error HTTP:  ${error.status}`));
+
+async function fillRolles(){
+    currentUser.then(user => {
+            let roles = '';
+            user.roles.forEach(role => {
+                roles += ' ';
+                roles += role.role.replaceAll('ROLE_', '');
+            })
+            document.getElementById("nav-email").innerHTML = user.email;
+            document.getElementById("nav-roles").innerHTML = roles;
+            document.getElementById("nav-email").setAttribute("idUser", user.id);
+        }
+    ).catch(err => alert(err));
 }
 
-async function buildPage(user, table){
 
+async function fillTableUser() {
+    currentUser.then(user => {
+        let mainTable = '';
 
-    let roles = [];
-    for (let role of user.roles) {
-        roles.push(' ' + role.role.toString().replaceAll('ROLE_', ''));
-    }
+        let roles = '';
+        user.roles.forEach(role => {
+            roles += ' ';
+            roles += role.role;
+            roles += role.role.replaceAll('ROLE_', '');
+        })
+        mainTable +=
+            `<tr>
+                <td>${user.id}</td>
+                <td>${user.username}</td>
+                <td>${user.lastname}</td>
+                 <td>${user.age}</td>
+                <td>${user.email}</td>
+                <td ${roles}</td>  
+                </tr>`
+        document.getElementById('user-info').innerHTML = mainTable;
 
-
-    let tr= document.createElement('tr');
-
-    tr.innerHTML =
-        `<tr>
-        <td>${user.id}</td>
-        <td>${user.username}</td>
-        <td>${user.lastname}</td>
-        <td>${user.age}</td>
-        <td>${user.email}</td>
-        <td>${roles}</td>
-    </tr>`
-    table.appendChild(tr);
-
-
+    }).catch(err => alert(err));
 }
-async function handleUserPageLoader(event) {
-    event.preventDefault();
-    let table = document.getElementById('user-info');
-    let user = await getData();
-    await buildPage(user, table);
-}
+fillTableUser();
+fillRolles()
+
+

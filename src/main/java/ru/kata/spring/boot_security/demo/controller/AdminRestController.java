@@ -18,13 +18,13 @@ public class AdminRestController {
 
 
     private final UserService userService;
-    private final RoleService roleService;
+
 
 
     @Autowired
-    public AdminRestController(UserService userService, RoleService roleService) {
+    public AdminRestController(UserService userService)  {
         this.userService = userService;
-        this.roleService = roleService;
+
     }
 
 
@@ -43,12 +43,6 @@ public class AdminRestController {
         User user = userService.getUserByUsername(principal.getName());
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
-
-    @GetMapping(value = "/roles")
-    public ResponseEntity<List<Role>> getRoles() {
-        return new ResponseEntity<>(roleService.getAllRole(), HttpStatus.OK);
-    }
-
 
     @PostMapping()
     public ResponseEntity<HttpStatus> createUser(@RequestBody User user) {
